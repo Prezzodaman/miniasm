@@ -1,0 +1,22 @@
+	; d0 = x counter
+	; d1 = y counter
+	; d2 = d0 & d1
+
+	mov #video_offset,a0
+loop:
+	mov d0,d2 ; d2 will contain a copy of the X before adding
+	and d1,d2 ; and the Y with the copy of the X
+	cmp #0,d2 ; if the value is 0, don't draw anything
+	je skip
+	sto #1,a0 ; otherwise, store a 1 at the current memory address
+skip:
+	add #1,a0 ; increase memory address...
+	add #1,d0 ; ...and X
+	cmp d0,#video_width ; reached width?
+	jl loop ; if not, continue checking
+	clr d0 ; if it's reached the width, reset X counter...
+	add #1,d1 ; ...and increase the Y counter
+	cmp d1,#video_height ; reached height?
+	jl loop ; if not, continue checking
+
+	; end of program
